@@ -5,9 +5,11 @@ CREATE TABLE Player(
     PID INT,
     Pname VARCHAR(15),
     Position VARCHAR(15),
-    DOB DATE,
+    DOB Date,
+    Age INT,
+    TID INT,
     PRIMARY KEY (PID),
-    FOREGIN KEY (TID) REFERENCES Team(TID);
+    FOREIGN KEY (TID) REFERENCES Team(TID);
 )
 
 -- Bridge entity
@@ -16,9 +18,9 @@ CREATE TABLE Goals (
     TID INT,
     MID INT,
     Time_of_Goal INT, --could just be the minute when the goal was scored at
-    FOREGIN KEY (PID) REFERENCES Player (PID),
-    FOREGIN KEY (TID) REFERENCES Team(TID),
-    FOREGIN KEY (MID) REFERENCES Match(MID);
+    FOREIGN KEY (PID) REFERENCES Player (PID),
+    FOREIGN KEY (TID) REFERENCES Team(TID),
+    FOREIGN KEY (MID) REFERENCES Match(MID);
 )
 
 CREATE TABLE Match (
@@ -28,7 +30,7 @@ CREATE TABLE Match (
     Home_team_score INT,
     Away_tema_score INT,
     PRIMARY KEY (MID),
-    FOREGIN KEY REFERENCES Stadium(SID);
+    FOREIGN KEY REFERENCES Stadium(SID);
 )
 
 --Bridge entity 
@@ -37,8 +39,8 @@ CREATE TABLE team_match(
     TID INT,
     Goal_scored INT,
     Home_match VARCHAR(15),
-    FOREGIN KEY (MID) REFERENCES Match (MID),
-    FOREGIN KEY (TID) REFERENCES Team (TID);
+    FOREIGN KEY (MID) REFERENCES Match (MID),
+    FOREIGN KEY (TID) REFERENCES Team (TID);
 )
 
 CREATE TABLE Stadium(
@@ -52,7 +54,9 @@ CREATE TABLE Stadium(
 CREATE TABLE World_Champions (
     WID INT, 
     Year INT,
-    PRIMARY KEY(WID);
+    TID INT,
+    PRIMARY KEY(WID),
+    FOREIGN KEY (TID) REFERENCES Team(TID);
 )
 
 CREATE TABLE Team (
@@ -77,7 +81,6 @@ CREATE TABLE Team_tournament(
     Match_played INT, 
     Ranking INT,
     Round_Eliminated INT,
-    FOREGIN KEY (TID) REFERENCES Team (TID),
-    FOREGIN KEY (GID) REFERENCES Group (GID);
+    FOREIGN KEY (TID) REFERENCES Team (TID),
+    FOREIGN KEY (GID) REFERENCES Group (GID);
 )
-
