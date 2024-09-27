@@ -16,8 +16,8 @@ CREATE TABLE Goals (
     TID INT,
     MID INT,
     Time_of_Goal INT, --could just be the minute when the goal was scored at
-    FOREGIN KEY (PID) REFERENCES Player (PID);
-    FOREGIN KEY (TID) REFERENCES Team(TID);
+    FOREGIN KEY (PID) REFERENCES Player (PID),
+    FOREGIN KEY (TID) REFERENCES Team(TID),
     FOREGIN KEY (MID) REFERENCES Match(MID);
 )
 
@@ -25,8 +25,20 @@ CREATE TABLE Match (
     MID INT, 
     MData Date, 
     Winner VARCHAR(15),
-    PRIMARY KEY (MID);
+    Home_team_score INT,
+    Away_tema_score INT,
+    PRIMARY KEY (MID),
     FOREGIN KEY REFERENCES Stadium(SID);
+)
+
+--Bridge entity 
+CREATE TABLE team_match(
+    MID INT,
+    TID INT,
+    Goal_scored INT,
+    Home_match VARCHAR(15),
+    FOREGIN KEY (MID) REFERENCES Match (MID),
+    FOREGIN KEY (TID) REFERENCES Team (TID);
 )
 
 --Bridge entity
