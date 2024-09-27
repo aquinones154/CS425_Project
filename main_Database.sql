@@ -41,10 +41,6 @@ CREATE TABLE team_match(
     FOREGIN KEY (TID) REFERENCES Team (TID);
 )
 
---Bridge entity
-
-CREATE TABLE Team_Tournament()
-
 CREATE TABLE Stadium(
     SID INT,
     Sname VARCHAR(15),
@@ -72,5 +68,16 @@ CREATE TABLE Group (
     Teams VARCHAR(15),
     Matches VARCHAR(15), 
     PRIMARY KEY (GID); 
+)
+
+-- Bridge entity
+CREATE TABLE Team_tournament(
+    TID INT,
+    GID INT,
+    Match_played INT, 
+    Ranking INT,
+    Round_Eliminated INT,
+    FOREGIN KEY (TID) REFERENCES Team (TID),
+    FOREGIN KEY (GID) REFERENCES Group (GID);
 )
 
