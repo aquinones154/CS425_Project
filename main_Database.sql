@@ -9,70 +9,70 @@ CREATE TABLE Player(
     Age INT,
     TID INT,
     PRIMARY KEY (PID),
-    FOREIGN KEY (TID) REFERENCES Team(TID);
-)
+    FOREIGN KEY (TID) REFERENCES Team(TID)
+);
 
--- Bridge entity
-CREATE TABLE Goals (
-    PID INT,
-    TID INT,
-    MID INT,
-    Time_of_Goal INT, --could just be the minute when the goal was scored at
-    FOREIGN KEY (PID) REFERENCES Player (PID),
-    FOREIGN KEY (TID) REFERENCES Team(TID),
-    FOREIGN KEY (MID) REFERENCES Match(MID);
-)
-
-CREATE TABLE Match (
+CREATE TABLE GameMatch (
     MID INT, 
     MData Date, 
     Winner VARCHAR(15),
     Home_team_score INT,
     Away_tema_score INT,
     PRIMARY KEY (MID),
-    FOREIGN KEY REFERENCES Stadium(SID);
-)
+    FOREIGN KEY (SID) REFERENCES Stadium(SID)
+);
 
---Bridge entity 
+-- Bridge entity
+CREATE TABLE Goals (
+    PID INT,
+    TID INT,
+    MID INT,
+    Time_of_Goal INT, -- could just be the minute when the goal was scored at
+    FOREIGN KEY (PID) REFERENCES Player (PID),
+    FOREIGN KEY (TID) REFERENCES Team(TID),
+    FOREIGN KEY (MID) REFERENCES GameMatch(MID)
+);
+
+-- Bridge entity 
 CREATE TABLE team_match(
     MID INT,
     TID INT,
     Goal_scored INT,
     Home_match VARCHAR(15),
-    FOREIGN KEY (MID) REFERENCES Match (MID),
-    FOREIGN KEY (TID) REFERENCES Team (TID);
-)
+    FOREIGN KEY (MID) REFERENCES GameMatch (MID),
+    FOREIGN KEY (TID) REFERENCES Team (TID)
+);
 
 CREATE TABLE Stadium(
     SID INT,
     Sname VARCHAR(15),
     Capacity INT,
     City VARCHAR(15),
-    PRIMARY KEY(SID);
-)
+    PRIMARY KEY(SID)
+);
 
 CREATE TABLE World_Champions (
     WID INT, 
     Year INT,
     TID INT,
     PRIMARY KEY(WID),
-    FOREIGN KEY (TID) REFERENCES Team(TID);
-)
+    FOREIGN KEY (TID) REFERENCES Team(TID)
+);
 
 CREATE TABLE Team (
     TID INT,
     Country VARCHAR(15),
     Coach VARCHAR(15),
-    PRIMARY KEY (TID);
-)
+    PRIMARY KEY (TID)
+);
 
-CREATE TABLE Group (
+CREATE TABLE TeamGroup (
     GID INT,
     Gname VARCHAR(15),
     Teams VARCHAR(15),
     Matches VARCHAR(15), 
-    PRIMARY KEY (GID); 
-)
+    PRIMARY KEY (GID)
+);
 
 -- Bridge entity
 CREATE TABLE Team_tournament(
@@ -82,5 +82,5 @@ CREATE TABLE Team_tournament(
     Ranking INT,
     Round_Eliminated INT,
     FOREIGN KEY (TID) REFERENCES Team (TID),
-    FOREIGN KEY (GID) REFERENCES Group (GID);
-)
+    FOREIGN KEY (GID) REFERENCES TeamGroup (GID)
+);
