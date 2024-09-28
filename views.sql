@@ -14,6 +14,6 @@ GROUP BY Player.PID, Player.Pname;
 
 -- shows match results including away and home matches
 CREATE VIEW Match_Score_Info AS
-SELECT Match.MID, Match.MData, Match.Winner, Match.Home_team_score, Match.Away_team_score, Stadium.Sname AS Stadium
-FROM Match
-JOIN Stadium ON Match.SID = Stadium.SID;
+SELECT GameMatch.MID, GameMatch.MData, GameMatch.Winner, GameMatch.Home_team_score, GameMatch.Away_team_score, Stadium.Sname AS Stadium
+FROM GameMatch
+JOIN Stadium ON GameMatch.SID = Stadium.SID;
