@@ -1,6 +1,21 @@
 CREATE DATABASE womensWrlCUP;
 USE womensWrlCUP;
 
+CREATE TABLE Team (
+    TID INT,
+    Country VARCHAR(15),
+    Coach VARCHAR(15),
+    PRIMARY KEY (TID)
+);
+
+CREATE TABLE Stadium(
+    SID INT,
+    Sname VARCHAR(15),
+    Capacity INT,
+    City VARCHAR(15),
+    PRIMARY KEY(SID)
+);
+
 CREATE TABLE Player(
     PID INT,
     Pname VARCHAR(15),
@@ -17,7 +32,8 @@ CREATE TABLE GameMatch (
     MData Date, 
     Winner VARCHAR(15),
     Home_team_score INT,
-    Away_tema_score INT,
+    Away_team_score INT,
+	SID INT,
     PRIMARY KEY (MID),
     FOREIGN KEY (SID) REFERENCES Stadium(SID)
 );
@@ -43,27 +59,12 @@ CREATE TABLE team_match(
     FOREIGN KEY (TID) REFERENCES Team (TID)
 );
 
-CREATE TABLE Stadium(
-    SID INT,
-    Sname VARCHAR(15),
-    Capacity INT,
-    City VARCHAR(15),
-    PRIMARY KEY(SID)
-);
-
 CREATE TABLE World_Champions (
     WID INT, 
     Year INT,
     TID INT,
     PRIMARY KEY(WID),
     FOREIGN KEY (TID) REFERENCES Team(TID)
-);
-
-CREATE TABLE Team (
-    TID INT,
-    Country VARCHAR(15),
-    Coach VARCHAR(15),
-    PRIMARY KEY (TID)
 );
 
 CREATE TABLE TeamGroup (
