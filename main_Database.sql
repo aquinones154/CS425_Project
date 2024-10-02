@@ -29,7 +29,7 @@ CREATE TABLE Player(
 
 CREATE TABLE GameMatch (
     MID INT, 
-    MData Date, 
+    MDate Date, 
     Winner VARCHAR(15),
     Home_team_score INT,
     Away_team_score INT,
