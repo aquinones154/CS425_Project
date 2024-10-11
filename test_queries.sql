@@ -26,4 +26,13 @@ INSERT INTO TeamGroup (GID, Gname, Teams, Matches) VALUES (24, 'NorthEast', 'Tea
 
 -- include advance window features
 -- olap query
--- 
+
+-- Selects all the goals and shows player, country, time of goak, and ranks over fastest scored goals
+SELECT p.pname, p.position, t.country, g.Time_of_Goal,
+RANK() OVER (ORDER BY Time_of_Goal ASC) AS fastest_goal_rank
+FROM Player AS p
+LEFT JOIN goals AS g
+ON p.pid = g.pid
+LEFT JOIN team AS t
+ON g.tid = t.tid;
+
