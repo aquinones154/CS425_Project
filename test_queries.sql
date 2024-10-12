@@ -18,11 +18,11 @@ WHERE Time_of_Goal > 45;
 
 -- insert query
 
--- Inserts data into gameMatch table 
-INSERT INTO GameMatch (MID,MData,Winner,Home_team_score,Away_team_score) VALUES (46,2004-10-09,'Team1', 3, 2, 15);
+-- inserts data into team table
+INSERT INTO Team (TID, Country, Coach) VALUES (2, 'Germany', 'Martina');
 
--- Inserts data into TeamGroup table
-INSERT INTO TeamGroup (GID, Gname, Teams, Matches) VALUES (24, 'NorthEast', 'TeamsA-D', 'test');
+-- inserts dat into stadium table
+INSERT INTO Stadium (SID, Sname, Capacity, City) VALUES (1, 'Stadium A', 50000, 'New York');
 
 -- include advance window features
 -- olap query
