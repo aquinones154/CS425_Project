@@ -57,6 +57,24 @@ FROM (
     GROUP BY S.Sname
 ) AS StadiumMatchCount;
 
+-- display the IDs of teams that have earned at least 7 points in a home game
+SELECT DISTINCT t.TID FROM team_match AS t, gamematch AS g
+WHERE t.MID = g.MID AND t.Home_match = "yes" AND Home_team_score > 7;
 
+-- display how many countries were eliminated in the first 5 tourney rounds (from 0 to 4)
+SELECT Round_Eliminated, COUNT(TID) AS Teams_Eliminated FROM team_tournament
+WHERE Round_Eliminated <= 4
+GROUP BY Round_Eliminated
+ORDER BY Round_Eliminated ASC;
 
+-- list all past world champion team countries along with the year they won the championship, in
+-- chronological order
+SELECT t.Country, w.Year FROM team AS t, world_champions AS w
+WHERE t.TID = w.TID
+ORDER BY w.Year;
 
+-- list all players above the average age, as well as how much older they are than the average
+-- sorted from youngest to oldest
+SELECT Pname, (Age - (SELECT AVG(Age) FROM Player)) AS distance_from_avg_age FROM Player
+WHERE Age > (SELECT AVG(Age) FROM Player)
+ORDER BY Age ASC
