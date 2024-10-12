@@ -48,6 +48,15 @@ UPDATE GameMatch
 SET Winner = 'Germany'
 WHERE MID = 65;
 
+-- counts total matches played at a stadium 
+SELECT Sname, TotalMatches
+FROM (
+    SELECT S.Sname, COUNT(GM.MID) AS TotalMatches
+    FROM GameMatch GM
+    JOIN Stadium S ON GM.SID = S.SID
+    GROUP BY S.Sname
+) AS StadiumMatchCount;
+
 
 
 
