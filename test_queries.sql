@@ -43,6 +43,11 @@ FROM Player P
 JOIN Team T ON P.TID = T.TID
 GROUP BY T.Country;
 
+-- update winner of a match
+UPDATE GameMatch
+SET Winner = 'Germany'
+WHERE MID = 65;
+
 
 
 
