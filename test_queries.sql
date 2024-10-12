@@ -36,3 +36,13 @@ ON p.pid = g.pid
 LEFT JOIN team AS t
 ON g.tid = t.tid;
 
+
+-- counts the total number of players per team
+SELECT T.Country, COUNT(P.PID) AS Total_Players
+FROM Player P
+JOIN Team T ON P.TID = T.TID
+GROUP BY T.Country;
+
+
+
+
