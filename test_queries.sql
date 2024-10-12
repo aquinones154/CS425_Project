@@ -12,7 +12,7 @@ FROM Stadium
 ORDER BY Capacity ASC; 
 
 -- outputs the goals scored after halftime  
-SELECT Time_of_Goal
+SELECT Time_of_Goal,MID,TID
 FROM Goals
 WHERE Time_of_Goal > 45; 
 
