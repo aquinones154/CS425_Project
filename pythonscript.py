@@ -3,7 +3,7 @@ import random
 
 host="localhost" # host name
 user="root"  # Database username
-password="Boba2021"  # Database password
+password="password"  # Database password
 database="womensWrlCUP"  # Name of the database to use
 
 
