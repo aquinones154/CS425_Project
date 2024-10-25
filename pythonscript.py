@@ -180,7 +180,31 @@ try:
                             print(f"Team with TID {team_id} updated successfully.")
 
                         else:
-                            print(f"No Team found with TID {team_id}")
+                            print(f"No Team found with TID {team_id}")                            
+
+                    elif table_name == 'Stadium':
+                        stadium_id = input("Enter the SID of the stadium you want to update: ")
+                        check_query = "SELECT * FROM Stadium WHERE SID = %s"
+                        cursor.execute(check_query,(stadium_id))
+                        stadium_data = cursor.fetchone()
+
+                        if stadium_data:
+                            print(f"Current stadium data: {stadium_data}")
+                            new_sname = input("Enter updated stadium name: ")
+                            new_capactiy = input("Enter updated capacity: ")
+                            new_city = input("Enter updated city: ")
+
+                            update_query = """
+                            UPDATE Stadium
+                            SET Sname = %s, Capacity = %s, City = %s
+                            WHERE SID = %s
+                            """
+
+                            cursor.execute(update_query, (new_sname, new_capacity, new_city, stadium_id))
+                            connection.commit()
+                            print(f"Stadium with SID {stadium_id} updated successfully.")
+                        else:
+                            print(f"No STADIUM found with SID {stadium_id}.")
 
         
                 except Exception as e:
