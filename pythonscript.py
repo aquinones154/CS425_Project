@@ -22,7 +22,7 @@ try:
         cursor = connection.cursor()
 
         #print statemnts for user to select what they want to do
-        userChoice= input('1. Read Data \n 2. Write Data \n 3. Insert Data \n 4. Update Data \n 5. Exit \n Enter which on you would like to do:  ')
+        userChoice= input('1. Read Data \n 2. Create Data \n 3. Delete Data \n 4. Update Data \n 5. Exit \n Enter which on you would like to do:  ')
         
 
         #READ DATA
@@ -48,7 +48,7 @@ try:
 
         #WRITE DATA
         elif(userChoice == '2'):
-            def write_data():
+            def create_data():
                 try: 
                     random_int = random.randint(1, 1000)
                     insert_query = "INSERT INTO `Stadium` (SID, Sname, Capacity, City) VALUES (%s,%s,%s,%s)"  
@@ -56,15 +56,15 @@ try:
                     cursor.execute(insert_query,stadium_data)
                     connection.commit()
                 except Exception as e:
-                    print(f"ERROR COULD NOT WRITE DATA: {e}")
+                    print(f"ERROR COULD NOT CREATE DATA: {e}")
 
-            write_data()
-            print("\n WRITE DATA COMPLETE \n")
+            create_data()
+            print("\n CREATE DATA COMPLETE \n")
             
 
 
         elif(userChoice == '3'):
-            #Insert data
+            #Delete data
             print("insert data")
         elif(userChoice == '4'):
              #Update data
