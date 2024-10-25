@@ -141,44 +141,52 @@ try:
         elif(userChoice == '4'):
             def update_data():
                 try:
-                     #ask user for TID they want to modify
-                    team_id = input("Enter the TEAM ID (TID) of the Team you want to update: ")
-            
-                    # verifying whether it is a valid TID or not
-                    check_query = "SELECT * FROM Team WHERE TID = %s"
-                    cursor.execute(check_query, (team_id,))
-                    team_data = cursor.fetchone()
-            
-                    if team_data:
-                        print(f"Current team data: {team_data}")
-                
-                        # asking for updated data to be put into table
-                        new_country = input("Enter updated country: ")
-                        new_coach = input("Enter updated coach: ")
-                
-                        # Update the team data
-                        update_query = """
-                        UPDATE Team
-                        SET Country = %s, Coach = %s
-                        WHERE TID = %s
-                        """
-                
-                        # Execute the update query with new data
-                        cursor.execute(update_query, (new_country, new_coach,team_id))
-                        connection.commit()  # commit the changes
-                
-                        print(f"TEAM with TID {team_id} updated successfully.") #print messsage to user that successfull update of data
-            
-                    else:
-                        print(f"No TEAM found with TID {team_id}.") #if not able to update data then let user know
+                    #ask user which table to update
+                    userChoice_update = input('Choose which table to read from: \n 1. Team \n 2. Stadium \n 3. Player\n Please choose one: ') 
+
+                    # map user choice to a table
+                    table_mapping = {
+                        '1': 'Team',
+                        '2': 'Stadium',
+                        '3': 'Player',
+                    }
+                    
+                     # Fetch the table name based on the user's choice
+                    table_name = table_mapping.get(userChoice_update)
+
+                    if not table_name:
+                        print("Invalid choice")
+                        return
+                    
+                    if table_name == 'Team' : 
+                        team_id = input("Enter the TID of the team you want to update: ")
+                        check_query = "SELECT * FROM Team WHERE TID = %s"
+                        cursor.execute(check_query,(team_id))
+                        team_data = cursor.fetchone()
+
+                        if team_data:
+                            print(f"Current team data: {team_data}")
+                            new_country = input("Enter updated country: ")
+                            new_coach = input("Enter updated coach: ")
+
+                            update_query = """
+                            UPDATE Team
+                            SET Country = %s, Coach = %s
+                            WHERE TID = %s
+                            """
+
+                            cursor.execute(update_query, (new_country,new_coach, team_id))
+                            connection.commit()
+                            print(f"Team with TID {team_id} updated successfully.")
+
+                        else:
+                            print(f"No Team found with TID {team_id}")
+
         
-                except Exception as e: 
-                    print(f"ERROR COULD NOT UPDATE DATA: {e}") #error message for user
+                except Exception as e:
+                    print(f"ERROR: Could not update data: {e}")
 
-            # call the update function
             update_data()
-
-
         #EXIT
         elif(userChoice == '5'):
           
