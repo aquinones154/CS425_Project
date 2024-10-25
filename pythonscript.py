@@ -1,4 +1,5 @@
 import mysql.connector
+import random
 
 host="localhost" # host name
 user="root"  # Database username
@@ -33,8 +34,8 @@ try:
                     cursor.execute(select_query)
                     player_data = cursor.fetchall()  # Fe
                     return player_data
-                except:
-                    print("ERROR COULD NOT READ DATA")
+                except Exception as e:
+                    print(f"ERROR COULD NOT READ DATA {e}")
                     return None
 
             player_data = read_data()
@@ -49,8 +50,9 @@ try:
         elif(userChoice == '2'):
             def write_data():
                 try: 
-                    insert_query = "INSERT INTO `Stadium` (SID, Sname, Capacity, City) VALUES (%s,%s,%s,%s)"
-                    stadium_data = (52 ,"COTA",50000, "Austin") #once running once change SID, if not then error will pop up saying error-> duplicate entry
+                    random_int = random.randint(1, 1000)
+                    insert_query = "INSERT INTO `Stadium` (SID, Sname, Capacity, City) VALUES (%s,%s,%s,%s)"  
+                    stadium_data = (random_int ,"COTA",50000, "Austin") # added random int just so everytime its run, hopefully a different unqiue SID and no errors
                     cursor.execute(insert_query,stadium_data)
                     connection.commit()
                 except Exception as e:
