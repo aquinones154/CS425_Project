@@ -44,9 +44,23 @@ try:
             else:
                 print("ERROR COULD NOT READ DATA") #if it didnt work then print error message
 
+
+        #WRITE DATA
         elif(userChoice == '2'):
-            #write data
-            print("write data")
+            def write_data():
+                try: 
+                    insert_query = "INSERT INTO `Stadium` (SID, Sname, Capacity, City) VALUES (%s,%s,%s,%s)"
+                    stadium_data = (52 ,"COTA",50000, "Austin") #once running once change SID, if not then error will pop up saying error-> duplicate entry
+                    cursor.execute(insert_query,stadium_data)
+                    connection.commit()
+                except Exception as e:
+                    print(f"ERROR COULD NOT WRITE DATA: {e}")
+
+            write_data()
+            print("\n WRITE DATA COMPLETE \n")
+            
+
+
         elif(userChoice == '3'):
             #Insert data
             print("insert data")
