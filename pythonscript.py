@@ -24,9 +24,16 @@ try:
         userChoice= input('1. Read Data \n 2. Write Data \n 3. Insert Data \n 4. Update Data \n 5. Exit \n Enter which on you would like to do:  ')
         
 
+        #READ DATA
         if(userChoice == '1' ):
-            #read data
-            print("read data")
+            def read_data():
+                #Read data from table
+                select_query = "SELECT *, FROM Player" #still a work in progress
+                cursor.execute(select_query)
+                Player = cursor.fetchall()
+
+            read_data()
+            print("READ DATA COMPLETE")
         elif(userChoice == '2'):
             #write data
             print("write data")
