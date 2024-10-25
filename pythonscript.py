@@ -35,7 +35,7 @@ try:
                 return None #end
 
         # READ DATA
-        if userChoice == '1': 
+        if (userChoice == '1'): 
             userChoice_read = input('Choose which table to read from: \n 1. Team \n 2. Stadium \n 3. Player \n 4. GameMatch \n 5. Goals \n 6. Team_match \n 7. World_Champions \n 8. TeamGroup \n 9. Team_tournament \n Please choose one: ') #asking user to pick a table to read from
             
             #map a number to a table name
@@ -65,7 +65,7 @@ try:
                 print("INVALID CHOICE") #print message only if choice is not valid
         
 
-        #WRITE DATA
+        #CREATE DATA
         elif(userChoice == '2'):
             def create_data():
                 try: 
@@ -80,14 +80,55 @@ try:
             create_data()
             print("\n CREATE DATA COMPLETE \n")
             
+            
 
 
         elif(userChoice == '3'):
             #Delete data
             print("insert data")
         elif(userChoice == '4'):
-             #Update data
-            print("update data")
+            def update_data():
+                try:
+                     #ask user for TID they want to modify
+                    team_id = input("Enter the TEAM ID (TID) of the Team you want to update: ")
+            
+                    # verifying whether it is a valid TID or not
+                    check_query = "SELECT * FROM Team WHERE TID = %s"
+                    cursor.execute(check_query, (team_id,))
+                    team_data = cursor.fetchone()
+            
+                    if team_data:
+                        print(f"Current team data: {team_data}")
+                
+                        # asking for updated data to be put into table
+                        new_country = input("Enter updated country: ")
+                        new_coach = input("Enter updated coach: ")
+                
+                        # Update the team data
+                        update_query = """
+                        UPDATE Team
+                        SET Country = %s, Coach = %s
+                        WHERE TID = %s
+                        """
+                
+                        # Execute the update query with new data
+                        cursor.execute(update_query, (new_country, new_coach,team_id))
+                        connection.commit()  # Commit the transaction to save changes
+                
+                        print(f"TEAM with TID {team_id} updated successfully.")
+            
+                    else:
+                        print(f"No TEAM found with TID {team_id}.")
+        
+                except Exception as e:
+                    print(f"ERROR COULD NOT UPDATE DATA: {e}")
+
+            # Call the update function
+            update_data()
+            
+
+
+            
 
         elif(userChoice == '5'):
           
