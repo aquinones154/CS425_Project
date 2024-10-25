@@ -161,7 +161,7 @@ try:
                     if table_name == 'Team' : 
                         team_id = input("Enter the TID of the team you want to update: ")
                         check_query = "SELECT * FROM Team WHERE TID = %s"
-                        cursor.execute(check_query,(team_id))
+                        cursor.execute(check_query,(team_id,))
                         team_data = cursor.fetchone()
 
                         if team_data:
@@ -185,13 +185,13 @@ try:
                     elif table_name == 'Stadium':
                         stadium_id = input("Enter the SID of the stadium you want to update: ")
                         check_query = "SELECT * FROM Stadium WHERE SID = %s"
-                        cursor.execute(check_query,(stadium_id))
+                        cursor.execute(check_query,(stadium_id,))
                         stadium_data = cursor.fetchone()
 
                         if stadium_data:
                             print(f"Current stadium data: {stadium_data}")
                             new_sname = input("Enter updated stadium name: ")
-                            new_capactiy = input("Enter updated capacity: ")
+                            new_capacity = input("Enter updated capacity: ")
                             new_city = input("Enter updated city: ")
 
                             update_query = """
@@ -206,6 +206,30 @@ try:
                         else:
                             print(f"No STADIUM found with SID {stadium_id}.")
 
+
+                    if table_name == 'Player':
+                        player_id = input("Enter the PID of the player you want to update: ")
+                        check_query = "SELECT * FROM Player WHERE PID = %s"
+                        cursor.execute(check_query,(player_id,))
+                        player_data = cursor.fetchone()
+
+                        if player_data:
+                            print(f"Current Player data:  {player_data}")
+                            new_pname = input("Enter updated Player name: ")
+                            new_pPosition = input("Enter updates Player position: ")
+                            new_DOB = input("Enter new DOB for player(YYYY-MM-DD): ")
+                            new_age = input("Enter new Player age: ")
+
+                            update_query = """
+                            UPDATE Player
+                            SET Pname = %s, Position = %s, DOB = %s, Age = %s
+                            WHERE PID = %s
+                            """
+                            cursor.execute(update_query, (new_pname, new_pPosition,new_DOB, new_age, player_id))
+                            connection.commit()
+                            print(f"Player with PID {player_id} updated successfully.")
+                        else:
+                            print(f"No PLAYER found with PID {player_id}.")
         
                 except Exception as e:
                     print(f"ERROR: Could not update data: {e}")
