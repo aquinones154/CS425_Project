@@ -25,15 +25,25 @@ try:
         
 
         #READ DATA
-        if(userChoice == '1' ):
+        if (userChoice == '1'):
             def read_data():
-                #Read data from table
-                select_query = "SELECT *, FROM Player" #still a work in progress
-                cursor.execute(select_query)
-                Player = cursor.fetchall()
+                try:
+                # Read data from table
+                    select_query = "SELECT * FROM Player"  # selects everything from player table
+                    cursor.execute(select_query)
+                    player_data = cursor.fetchall()  # Fe
+                    return player_data
+                except:
+                    print("ERROR COULD NOT READ DATA")
+                    return None
 
-            read_data()
-            print("READ DATA COMPLETE")
+            player_data = read_data()
+            if player_data:
+                print(player_data)  #prints data
+                print("\n READ DATA COMPLETE \n") #print message to show it worked
+            else:
+                print("ERROR COULD NOT READ DATA") #if it didnt work then print error message
+
         elif(userChoice == '2'):
             #write data
             print("write data")
