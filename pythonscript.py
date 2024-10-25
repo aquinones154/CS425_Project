@@ -88,9 +88,15 @@ try:
         elif(userChoice == '4'):
              #Update data
             print("update data")
+
         elif(userChoice == '5'):
-         #exit
-            print("exit")
+          
+          #if user choose to exit, then check if connection is still openend, if it is then close it
+          if connection.is_connected():
+                cursor.close()
+                connection.close()
+                print("\n Database connection closed. \n") #print message for the user
+                print(" exit ")
 
         else:
             print("NOT A VALID CHOICE")
