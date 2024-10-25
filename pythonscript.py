@@ -69,23 +69,31 @@ try:
         elif(userChoice == '2'):
             def create_data():
                 try: 
-                    random_int = random.randint(1, 1000)
-                    insert_query = "INSERT INTO `Stadium` (SID, Sname, Capacity, City) VALUES (%s,%s,%s,%s)"  
-                    stadium_data = (random_int ,"COTA",50000, "Austin") # added random int just so everytime its run, hopefully a different unqiue SID and no errors
-                    cursor.execute(insert_query,stadium_data)
-                    connection.commit()
+                    userChoice_Create = input('Choose which table to Create data in: \n 1. Team \n 2. Stadium \n 3. Player \n 4. GameMatch \n 5. Goals \n 6. Team_match \n 7. World_Champions \n 8. TeamGroup \n 9. Team_tournament \n Please choose one: ') #asking user to pick a table to create data in 
+
+                    #map a number to a table name
+                    table_mapping = {
+                    '1': 'Team',
+                    '2': 'Stadium',
+                    '3': 'Player',
+                    '4': 'GameMatch',
+                    '5': 'Goals',
+                    '6': 'Team_match',
+                    '7': 'World_Champions',
+                    '8': 'TeamGroup',
+                    '9': 'Team_tournament'
+                    }
+                  
                 except Exception as e:
                     print(f"ERROR COULD NOT CREATE DATA: {e}")
-
-            create_data()
-            print("\n CREATE DATA COMPLETE \n")
-            
-            
 
 
         elif(userChoice == '3'):
             #Delete data
-            print("insert data")
+            print("delete data")
+
+
+        #UPDATE DATA     
         elif(userChoice == '4'):
             def update_data():
                 try:
@@ -113,23 +121,21 @@ try:
                 
                         # Execute the update query with new data
                         cursor.execute(update_query, (new_country, new_coach,team_id))
-                        connection.commit()  # Commit the transaction to save changes
+                        connection.commit()  # commit the changes
                 
-                        print(f"TEAM with TID {team_id} updated successfully.")
+                        print(f"TEAM with TID {team_id} updated successfully.") #print messsage to user that successfull update of data
             
                     else:
-                        print(f"No TEAM found with TID {team_id}.")
+                        print(f"No TEAM found with TID {team_id}.") #if not able to update data then let user know
         
-                except Exception as e:
-                    print(f"ERROR COULD NOT UPDATE DATA: {e}")
+                except Exception as e: 
+                    print(f"ERROR COULD NOT UPDATE DATA: {e}") #error message for user
 
-            # Call the update function
+            # call the update function
             update_data()
-            
 
 
-            
-
+        #EXIT
         elif(userChoice == '5'):
           
           #if user choose to exit, then check if connection is still openend, if it is then close it
@@ -137,12 +143,11 @@ try:
                 cursor.close()
                 connection.close()
                 print("\n Database connection closed. \n") #print message for the user
-                print(" exit ")
 
         else:
-            print("NOT A VALID CHOICE")
+            print("NOT A VALID CHOICE") #print message if user picks an option that is not valid 
 
         
 
 except:
-    print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE")
+    print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
