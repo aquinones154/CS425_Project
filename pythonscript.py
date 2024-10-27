@@ -132,9 +132,81 @@ try:
 
             create_data()
 
+        # DELETE DATA
         elif(userChoice == '3'):
-            #Delete data
-            print("delete data")
+            def delete_data():
+                try:
+                    # ask user which table to delete data from
+                    userChoice_delete = input('Choose which table to delete data from:\n1. Team\n2. Stadium\n3. Player\nPlease choose one: ')
+
+                    # map user choice to a table
+                    table_mapping = {
+                        '1': 'Team',
+                        '2': 'Stadium',
+                        '3': 'Player',
+                    }
+                    
+                     # Fetch the table name based on the user's choice
+                    table_name = table_mapping.get(userChoice_update)
+
+                    if not table_name:
+                        print("Invalid choice")
+                        return
+                    
+                    if table_name == 'Team' : 
+                        team_id = input("Enter the TID of the team you want to delete: ")
+                        check_query = "SELECT * FROM Team WHERE TID = %s"
+                        cursor.execute(check_query,(team_id,))
+                        team_data = cursor.fetchone()
+
+                        if team_data:
+                            print(f"Team data: {team_data}\n")
+                            delete_confirm = input("Really delete this team? (y/n) ")
+                            if delete_confirm == "y" or delete_confirm == "Y":
+                                cursor.execute("DELETE FROM Team WHERE TID = %s",(team_id,))
+                                connection.commit()
+                                print(f"Team {team_id} deleted.")
+                            else:
+                                print("Deletion aborted.")
+                        else:
+                            print(f"No Team found with TID {team_id}") 
+                    elif table_name == "Stadium":
+                        stadium_id = input("Enter the SID of the stadium you want to delete: ")
+                        check_query = "SELECT * FROM Stadium WHERE SID = %s"
+                        cursor.execute(check_query,(stadium_id,))
+                        stadium_data = cursor.fetchone()
+
+                        if stadium_data:
+                            print(f"Stadium data: {stadium_data}")
+                            delete_confirm = input("Really delete this stadium? (y/n) ")
+                            if delete_confirm == "y" or delete_confirm == "Y":
+                                cursor.execute("DELETE FROM Stadium WHERE SID = %s",(stadium_id,))
+                                connection.commit()
+                                print(f"Stadium {stadium_id} deleted.")
+                            else:
+                                print("Deletion aborted.")
+                        else:
+                            print(f"No Stadium found with SID {stadium_id}") 
+                    elif table_name == 'Player':
+                        player_id = input("Enter the PID of the player you want to delete: ")
+                        check_query = "SELECT * FROM Player WHERE PID = %s"
+                        cursor.execute(check_query,(player_id,))
+                        player_data = cursor.fetchone()
+
+                        if player_data:
+                            print(f"Player data: {player_data}")
+                            delete_confirm = input("Really delete this player? (y/n) ")
+                            if delete_confirm == "y" or delete_confirm == "Y":
+                                cursor.execute("DELETE FROM Player WHERE PID = %s",(player_id,))
+                                connection.commit()
+                                print(f"Player {player_id} deleted.")
+                            else:
+                                print("Deletion aborted.")
+                        else:
+                            print(f"No Player found with PID {player_id}")
+                except Exception as e:
+                    print(f"ERROR: Could not delete data: {e}")
+            delete_data()
 
 
         #UPDATE DATA     
@@ -142,7 +214,7 @@ try:
             def update_data():
                 try:
                     #ask user which table to update
-                    userChoice_update = input('Choose which table to read from: \n 1. Team \n 2. Stadium \n 3. Player\n Please choose one: ') 
+                    userChoice_update = input('Choose which table to update data in: \n 1. Team \n 2. Stadium \n 3. Player\n Please choose one: ') 
 
                     # map user choice to a table
                     table_mapping = {
