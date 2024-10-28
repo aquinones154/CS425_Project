@@ -147,7 +147,7 @@ try:
                     }
                     
                      # Fetch the table name based on the user's choice
-                    table_name = table_mapping.get(userChoice_update)
+                    table_name = table_mapping.get(userChoice_delete)
 
                     if not table_name:
                         print("Invalid choice")
@@ -158,6 +158,7 @@ try:
                         check_query = "SELECT * FROM Team WHERE TID = %s"
                         cursor.execute(check_query,(team_id,))
                         team_data = cursor.fetchone()
+                        
 
                         if team_data:
                             print(f"Team data: {team_data}\n")
