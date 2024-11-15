@@ -1,7 +1,6 @@
 import mysql.connector
 import random
-import tkinter
-from tkinter import *
+import PySimpleGUI as sg
 
 
 host="localhost" # host name
@@ -9,8 +8,6 @@ user="root"  # Database username
 password="password"  # Database password
 database="womensWrlCUP"  # Name of the database to use
 
-# tkinter._test() ##TEST to make sure tkinter works
-tk = tkinter.Tk()
 
 try: 
 # Connect to the MySQL database
