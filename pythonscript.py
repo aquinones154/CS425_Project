@@ -195,118 +195,81 @@ def setup_form():
         Button(create_window, text="Submit", command=submit_data).pack(pady=10)
 
 
-#         UPDATE DATA     
-#         elif(userChoice == '4'):
-#             def update_data():
-#                 try:
-#                     #ask user which table to update
-#                     userChoice_update = input('Choose which table to update data in: \n 1. Team \n 2. Stadium \n 3. Player\n Please choose one: ') 
+def update_data():
+        table_name = table_mapping[update_table_choice.get()]
+        identifier = record_id_input.get()
+        if not identifier:
+            messagebox.showerror("Error", "Please enter the Record ID!")
+            return
+        if table_name == "Team":
+            data = (country_input.get(), coach_input.get())
+        elif table_name == "Stadium":
+            data = (stadium_name_input.get(), capacity_input.get(), city_input.get())
+        elif table_name == "Player":
+            data = (player_name_input.get(), position_input.get(), dob_input.get(), age_input.get())
+        else:
+            return
+        update_data(cursor, connection, table_name, identifier, data)
+        update_window.destroy()
 
-#                     # map user choice to a table
-#                     table_mapping = {
-#                         '1': 'Team',
-#                         '2': 'Stadium',
-#                         '3': 'Player',
-#                     }
-                    
-#                      # Fetch the table name based on the user's choice
-#                     table_name = table_mapping.get(userChoice_update)
-
-#                     if not table_name:
-#                         print("Invalid choice")
-#                         return
-                    
-#                     if table_name == 'Team' : 
-#                         team_id = input("Enter the TID of the team you want to update: ")
-#                         check_query = "SELECT * FROM Team WHERE TID = %s"
-#                         cursor.execute(check_query,(team_id,))
-#                         team_data = cursor.fetchone()
-
-#                         if team_data:
-#                             print(f"Current team data: {team_data}")
-#                             new_country = input("Enter updated country: ")
-#                             new_coach = input("Enter updated coach: ")
-
-#                             update_query = """
-#                             UPDATE Team
-#                             SET Country = %s, Coach = %s
-#                             WHERE TID = %s
-#                             """
-
-#                             cursor.execute(update_query, (new_country,new_coach, team_id))
-#                             connection.commit()
-#                             print(f"Team with TID {team_id} updated successfully.")
-
-#                         else:
-#                             print(f"No Team found with TID {team_id}")                            
-
-#                     elif table_name == 'Stadium':
-#                         stadium_id = input("Enter the SID of the stadium you want to update: ")
-#                         check_query = "SELECT * FROM Stadium WHERE SID = %s"
-#                         cursor.execute(check_query,(stadium_id,))
-#                         stadium_data = cursor.fetchone()
-
-#                         if stadium_data:
-#                             print(f"Current stadium data: {stadium_data}")
-#                             new_sname = input("Enter updated stadium name: ")
-#                             new_capacity = input("Enter updated capacity: ")
-#                             new_city = input("Enter updated city: ")
-
-#                             update_query = """
-#                             UPDATE Stadium
-#                             SET Sname = %s, Capacity = %s, City = %s
-#                             WHERE SID = %s
-#                             """
-
-#                             cursor.execute(update_query, (new_sname, new_capacity, new_city, stadium_id))
-#                             connection.commit()
-#                             print(f"Stadium with SID {stadium_id} updated successfully.")
-#                         else:
-#                             print(f"No STADIUM found with SID {stadium_id}.")
+        update_window = Toplevel(root)
+        update_window.title("Update Data")
+        Label(update_window, text="Select Table:").pack(pady=5)
+        update_table_choice = ttk.Combobox(
+        update_window,
+        values=list(table_mapping.keys())
+        )
+        update_table_choice.pack(pady=5)
+        update_table_choice.bind("<<ComboboxSelected>>", lambda _: setup_update_form())
+        form_frame = Frame(update_window)
+        form_frame.pack(pady=10)
+        Button(update_window, text="Submit", command=submit_update).pack(pady=10)
 
 
-#                     if table_name == 'Player':
-#                         player_id = input("Enter the PID of the player you want to update: ")
-#                         check_query = "SELECT * FROM Player WHERE PID = %s"
-#                         cursor.execute(check_query,(player_id,))
-#                         player_data = cursor.fetchone()
+# GUI Functions
+def update_data_gui(cursor, connection):
+    def setup_update_form():
+            for widget in form_frame.winfo_children():
+                widget.destroy()
+            table_name = table_mapping[update_table_choice.get()]
+            Label(form_frame, text="Enter Record ID to Update:").grid(row=0, column=0, padx=5, pady=5)
+            global record_id_input
+            record_id_input = Entry(form_frame)
+            record_id_input.grid(row=0, column=1, padx=5, pady=5)
 
-#                         if player_data:
-#                             print(f"Current Player data:  {player_data}")
-#                             new_pname = input("Enter updated Player name: ")
-#                             new_pPosition = input("Enter updates Player position: ")
-#                             new_DOB = input("Enter new DOB for player(YYYY-MM-DD): ")
-#                             new_age = input("Enter new Player age: ")
-
-#                             update_query = """
-#                             UPDATE Player
-#                             SET Pname = %s, Position = %s, DOB = %s, Age = %s
-#                             WHERE PID = %s
-#                             """
-#                             cursor.execute(update_query, (new_pname, new_pPosition,new_DOB, new_age, player_id))
-#                             connection.commit()
-#                             print(f"Player with PID {player_id} updated successfully.")
-#                         else:
-#                             print(f"No PLAYER found with PID {player_id}.")
-        
-#                 except Exception as e:
-#                     print(f"ERROR: Could not update data: {e}")
-
-#             update_data()
-#         #EXIT
-#         elif(userChoice == '5'):
-          
-#           #if user choose to exit, then check if connection is still openend, if it is then close it
-#           if connection.is_connected():
-#                 cursor.close()
-#                 connection.close()
-#                 print("\n Database connection closed. \n") #print message for the user
-
-#         else:
-#             print("NOT A VALID CHOICE") #print message if user picks an option that is not valid 
-
-# # except:
-# #    print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
+            if table_name == "Team":
+                Label(form_frame, text="Country:").grid(row=1, column=0, padx=5, pady=5)
+                global country_input, coach_input
+                country_input = Entry(form_frame)
+                country_input.grid(row=1, column=1, padx=5, pady=5)
+                Label(form_frame, text="Coach:").grid(row=2, column=0, padx=5, pady=5)
+                coach_input = Entry(form_frame)
+                coach_input.grid(row=2, column=1, padx=5, pady=5)
+            elif table_name == "Stadium":
+                Label(form_frame, text="Stadium Name:").grid(row=1, column=0, padx=5, pady=5)
+                global stadium_name_input, capacity_input, city_input
+                stadium_name_input = Entry(form_frame)
+                stadium_name_input.grid(row=1, column=1, padx=5, pady=5)
+                Label(form_frame, text="Capacity:").grid(row=2, column=0, padx=5, pady=5)
+                capacity_input = Entry(form_frame)
+                capacity_input.grid(row=2, column=1, padx=5, pady=5)
+                Label(form_frame, text="City:").grid(row=3, column=0, padx=5, pady=5)
+                city_input = Entry(form_frame)
+                city_input.grid(row=3, column=1, padx=5, pady=5)
+            elif table_name == "Player":
+                Label(form_frame, text="Player Name:").grid(row=1, column=0, padx=5, pady=5)
+                global player_name_input, position_input, dob_input, age_input
+                player_name_input = Entry(form_frame)
+                player_name_input.grid(row=1, column=1, padx=5, pady=5)
+                Label(form_frame, text="Position:").grid(row=2, column=0, padx=5, pady=5)
+                position_input = Entry(form_frame)
+                position_input.grid(row=2, column=1, padx=5, pady=5)
+                Label(form_frame, text="DOB (YYYY-MM-DD):").grid(row=3, column=0, padx=5, pady=5)
+                dob_input = Entry(form_frame)
+                dob_input.grid(row=3, column=1, padx=5, pady=5)
+                Label(form_frame, text="Age:").grid(row=4, column=0, padx=5, pady=5)
+                age_input = Entry(form_frame)
+                age_input.grid(row=4, column=1, padx=5, pady=5)
 
 # table mapping to be used in some of the operations
 table_mapping = {
@@ -326,6 +289,7 @@ if connection:
     Button(root, text="Read Data", command=lambda: read_data_gui(cursor), width=20).pack(pady=10)
     Button(root, text="Add Data", command=lambda: create_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Delete Data", command=lambda: delete_data_gui(cursor, connection), width=20).pack(pady=10)
+    Button(root, text="Update Data", command=lambda: update_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Exit", command=root.destroy, width=20).pack(pady=10)
-
+    
 root.mainloop()
