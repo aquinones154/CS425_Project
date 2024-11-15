@@ -1,41 +1,35 @@
 import mysql.connector
 import random
-import PySimpleGUI as sg
+from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
 
 
-# databaseconnection
+# connection to database
 def connect_to_database():
     try:
-        conn = mysql.connector.connect(
-            host="localhost",# host name
-            user="root",  # Database username
-            password="Password",  # Database password
-            database="womensWrlCUP" # Name of the database to use
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="password",
+            database="womensWrlCUP"
         )
-        if conn.is_connected():
-            return conn
-    except mysql.connector.Error as err:
-        sg.popup_error("Database Connection Error", f"Error: {err}")
+        if connection.is_connected():
+            return connection
+    except mysql.connector.Error as e:
+        messagebox.showerror("Database Connection Error", f"Error: {e}")
         return None
-
-
-try: 
-# Connect to the MySQL database
-    connection = mysql.connector.connect(
-    host=host,
-    user=user,  
-    password=password, 
-    database=database
-)
     
-    if connection.is_connected():
-        print("Connected to MYSQL database successfully")
-
-        cursor = connection.cursor()
-
-        #print statemnts for user to select what they want to do
-        userChoice= input(' 1. Read Data \n 2. Create Data \n 3. Delete Data \n 4. Update Data \n 5. Exit \n Enter which on you would like to do:  ')
-        
+    # read opeartion
+def read_data(cursor, table_name):
+    try:
+        select_query = f"SELECT * FROM {table_name}" #select query
+        cursor.execute(select_query)
+        return cursor.fetchall(), [desc[0] for desc in cursor.description]
+    except mysql.connector.Error as e: #error handling
+        messagebox.showerror("Read Error", f"Error reading data: {e}")
+        return None, None
+#
         #function to read data
         def read_data(table_name):
             try:
@@ -332,5 +326,5 @@ try:
         else:
             print("NOT A VALID CHOICE") #print message if user picks an option that is not valid 
 
-except:
-    print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
+# except:
+#    print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
