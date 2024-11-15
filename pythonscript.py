@@ -3,10 +3,20 @@ import random
 import PySimpleGUI as sg
 
 
-host="localhost" # host name
-user="root"  # Database username
-password="password"  # Database password
-database="womensWrlCUP"  # Name of the database to use
+# databaseconnection
+def connect_to_database():
+    try:
+        conn = mysql.connector.connect(
+            host="localhost",# host name
+            user="root",  # Database username
+            password="Password",  # Database password
+            database="womensWrlCUP" # Name of the database to use
+        )
+        if conn.is_connected():
+            return conn
+    except mysql.connector.Error as err:
+        sg.popup_error("Database Connection Error", f"Error: {err}")
+        return None
 
 
 try: 
@@ -321,11 +331,6 @@ try:
 
         else:
             print("NOT A VALID CHOICE") #print message if user picks an option that is not valid 
-
-        
-    # Set up the main window
-    root = tk.Tk()
-    root.title("MySQL Database Manager")
 
 except:
     print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
