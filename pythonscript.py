@@ -1,11 +1,16 @@
 import mysql.connector
 import random
+import tkinter
+from tkinter import *
+
 
 host="localhost" # host name
 user="root"  # Database username
 password="password"  # Database password
 database="womensWrlCUP"  # Name of the database to use
 
+# tkinter._test() ##TEST to make sure tkinter works
+tk = tkinter.Tk()
 
 try: 
 # Connect to the MySQL database
@@ -321,6 +326,9 @@ try:
             print("NOT A VALID CHOICE") #print message if user picks an option that is not valid 
 
         
+    # Set up the main window
+    root = tk.Tk()
+    root.title("MySQL Database Manager")
 
 except:
     print("ERROR: COULD NOT CONNECT TO MYSQL DATABASE") #message to print if no connection could be made with MYSQL database
