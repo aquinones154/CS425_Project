@@ -58,6 +58,7 @@ def read_data_gui(cursor):
     read_table_choice.pack(pady=5)
     Button(read_window, text="Fetch Data", command=fetch_data).pack(pady=10)
 
+
 #create data operation
 def create_data(cursor, connection, table_name, data):
     try:
@@ -72,6 +73,115 @@ def create_data(cursor, connection, table_name, data):
         messagebox.showinfo("Success", f"Data inserted into {table_name}!")
     except mysql.connector.Error as e:
         messagebox.showerror("Insert Error", f"Error inserting data: {e}") #error handling incase inserting of data is not valid or succesfful
+
+
+def create_data_gui(cursor, connection):
+    def setup_form():
+        for widget in form_frame.winfo_children():
+            widget.destroy()
+        input_fields.clear()  
+
+        table_name = create_table_choice.get()
+
+        if table_name == "Team":
+            Label(form_frame, text="Country:").grid(row=0, column=0, padx=5, pady=5)
+            input_fields["Country"] = Entry(form_frame)
+            input_fields["Country"].grid(row=0, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="Coach:").grid(row=1, column=0, padx=5, pady=5)
+            input_fields["Coach"] = Entry(form_frame)
+            input_fields["Coach"].grid(row=1, column=1, padx=5, pady=5)
+
+        elif table_name == "Stadium":
+            Label(form_frame, text="Stadium Name:").grid(row=0, column=0, padx=5, pady=5)
+            input_fields["Stadium Name"] = Entry(form_frame)
+            input_fields["Stadium Name"].grid(row=0, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="Capacity:").grid(row=1, column=0, padx=5, pady=5)
+            input_fields["Capacity"] = Entry(form_frame)
+            input_fields["Capacity"].grid(row=1, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="City:").grid(row=2, column=0, padx=5, pady=5)
+            input_fields["City"] = Entry(form_frame)
+            input_fields["City"].grid(row=2, column=1, padx=5, pady=5)
+
+        elif table_name == "Player":
+            Label(form_frame, text="Player Name:").grid(row=0, column=0, padx=5, pady=5)
+            input_fields["Player Name"] = Entry(form_frame)
+            input_fields["Player Name"].grid(row=0, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="Position:").grid(row=1, column=0, padx=5, pady=5)
+            input_fields["Position"] = Entry(form_frame)
+            input_fields["Position"].grid(row=1, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="DOB (YYYY-MM-DD):").grid(row=2, column=0, padx=5, pady=5)
+            input_fields["DOB"] = Entry(form_frame)
+            input_fields["DOB"].grid(row=2, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="Age:").grid(row=3, column=0, padx=5, pady=5)
+            input_fields["Age"] = Entry(form_frame)
+            input_fields["Age"].grid(row=3, column=1, padx=5, pady=5)
+
+            Label(form_frame, text="Team ID:").grid(row=4, column=0, padx=5, pady=5)
+            input_fields["Team ID"] = Entry(form_frame)
+            input_fields["Team ID"].grid(row=4, column=1, padx=5, pady=5)
+
+    def submit_data():
+        table_name = create_table_choice.get()
+        if not table_name:
+            messagebox.showerror("Error", "Please select a valid table!")
+            return
+
+        try:
+            if table_name == "Team":
+                data = (
+                    random.randint(1, 1000),  # creating a new TID
+                    input_fields["Country"].get(),
+                    input_fields["Coach"].get(),
+                )
+            elif table_name == "Stadium":
+                capacity = int(input_fields["Capacity"].get())
+                data = (
+                    random.randint(1, 1000), #creating a new SID
+                    input_fields["Stadium Name"].get(),
+                    capacity,
+                    input_fields["City"].get(),
+                )
+            elif table_name == "Player":
+                age = int(input_fields["Age"].get())
+                dob = input_fields["DOB"].get()
+                data = (
+                    random.randint(1, 1000), #creating a new PID
+                    input_fields["Player Name"].get(),
+                    input_fields["Position"].get(),
+                    dob,
+                    age,
+                    input_fields["Team ID"].get(),
+                )
+            else:
+                messagebox.showerror("Error", "Unsupported table!")
+                return
+
+            create_data(cursor, connection, table_name, data)
+            create_window.destroy()
+
+        except ValueError as ve:
+            messagebox.showerror("Validation Error", f"Invalid input: {ve}")
+
+    # Create the create data window
+    create_window = Toplevel(root)
+    create_window.title("Create Data")
+    Label(create_window, text="Select Table:").pack(pady=5)
+    create_table_choice = ttk.Combobox(create_window, values=["Team", "Stadium", "Player"])
+    create_table_choice.pack(pady=5)
+    create_table_choice.bind("<<ComboboxSelected>>", lambda _: setup_form())
+
+    form_frame = Frame(create_window)
+    form_frame.pack(pady=10)
+
+    Button(create_window, text="Submit", command=submit_data).pack(pady=10)
+
+    input_fields = {}
 
 
 #update_data user interface
@@ -170,7 +280,7 @@ def update_data_gui(cursor, connection):
 
     Button(update_window, text="Submit", command=submit_update).grid(row=2, column=0, columnspan=2, pady=10)
 
-    input_fields = {}  # Dictionary to hold input fields
+    input_fields = {}  
     record_id_input = Entry(update_window)
        
 def delete_data(cursor, connection, table_name, identifier):
@@ -211,7 +321,7 @@ def delete_data_gui(cursor, connection):
 
 def update_data_gui(cursor, connection):
     def setup_form():
-        # Clear previous widgets
+        
         for widget in form_frame.winfo_children():
             widget.destroy()
         input_fields.clear()  
@@ -293,7 +403,7 @@ def update_data_gui(cursor, connection):
         except mysql.connector.Error as e:
             messagebox.showerror("Update Error", f"Error updating data: {e}")
 
-    # Create the update window
+    
     update_window = Toplevel(root)
     update_window.title("Update Data")
     Label(update_window, text="Select Table:").pack(pady=5)
