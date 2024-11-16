@@ -11,7 +11,7 @@ def connect_to_database():
         connection = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Boba2021",
+            password="password",
             database="womensWrlCUP"
         )
         if connection.is_connected():
@@ -25,7 +25,7 @@ def read_data(cursor, table_name):
     try:
         select_query = f"SELECT * FROM {table_name}" #select query
         cursor.execute(select_query)
-        return cursor.fetchall(), [desc[0] for desc in cursor.description]
+        return cursor.fetchall(), [desc[0] for desc in cursor.description] #read the data 
     except mysql.connector.Error as e: #error handling
         messagebox.showerror("Read Error", f"Error reading data: {e}") #error handling in case data cannot be read 
         return None, None
@@ -37,23 +37,23 @@ def read_data_gui(cursor):
         if not table_name:
             messagebox.showerror("Error", "Please select a valid table!")
             return
-        data, columns = read_data(cursor, table_name)
+        data, columns = read_data(cursor, table_name) # gets the data to be displayed in gui
         if data:
             result_window = Toplevel(root)
             result_window.title(f"Data from {table_name}")
-            table = ttk.Treeview(result_window, columns=columns, show="headings")
+            table = ttk.Treeview(result_window, columns=columns, show="headings") #displays the table
             for col in columns:
                 table.heading(col, text=col)
             for row in data:
                 table.insert("", "end", values=row)
             table.pack(fill=BOTH, expand=True)
 
-    read_window = Toplevel(root)
+    read_window = Toplevel(root) #creates new windwo for the read data 
     read_window.title("Read Data")
     Label(read_window, text="Select Table:").pack(pady=5)
     read_table_choice = ttk.Combobox(
         read_window,
-        values=list(table_mapping.keys())
+        values=list(table_mapping.keys()) #drop down menu stuff
     )
     read_table_choice.pack(pady=5)
     Button(read_window, text="Fetch Data", command=fetch_data).pack(pady=10)
@@ -83,41 +83,49 @@ def create_data_gui(cursor, connection):
 
         table_name = create_table_choice.get()
 
-        if table_name == "Team":
+        if table_name == "Team": #creates input boxes to but in a name from country
             Label(form_frame, text="Country:").grid(row=0, column=0, padx=5, pady=5)
             input_fields["Country"] = Entry(form_frame)
             input_fields["Country"].grid(row=0, column=1, padx=5, pady=5)
 
+            #create input field to put name of coach
             Label(form_frame, text="Coach:").grid(row=1, column=0, padx=5, pady=5)
             input_fields["Coach"] = Entry(form_frame)
             input_fields["Coach"].grid(row=1, column=1, padx=5, pady=5)
 
-        elif table_name == "Stadium":
+        #
+        elif table_name == "Stadium": #creates field to put stamdium name
             Label(form_frame, text="Stadium Name:").grid(row=0, column=0, padx=5, pady=5)
             input_fields["Stadium Name"] = Entry(form_frame)
             input_fields["Stadium Name"].grid(row=0, column=1, padx=5, pady=5)
 
+            #input field for capactiy
             Label(form_frame, text="Capacity:").grid(row=1, column=0, padx=5, pady=5)
             input_fields["Capacity"] = Entry(form_frame)
             input_fields["Capacity"].grid(row=1, column=1, padx=5, pady=5)
 
+            #input field for city
             Label(form_frame, text="City:").grid(row=2, column=0, padx=5, pady=5)
             input_fields["City"] = Entry(form_frame)
             input_fields["City"].grid(row=2, column=1, padx=5, pady=5)
 
-        elif table_name == "Player":
+        elif table_name == "Player": # input field for player name
             Label(form_frame, text="Player Name:").grid(row=0, column=0, padx=5, pady=5)
             input_fields["Player Name"] = Entry(form_frame)
             input_fields["Player Name"].grid(row=0, column=1, padx=5, pady=5)
 
+            #input field for position
             Label(form_frame, text="Position:").grid(row=1, column=0, padx=5, pady=5)
             input_fields["Position"] = Entry(form_frame)
             input_fields["Position"].grid(row=1, column=1, padx=5, pady=5)
 
+            #input field for DOB
             Label(form_frame, text="DOB (YYYY-MM-DD):").grid(row=2, column=0, padx=5, pady=5)
             input_fields["DOB"] = Entry(form_frame)
             input_fields["DOB"].grid(row=2, column=1, padx=5, pady=5)
 
+
+            #input field for AGE
             Label(form_frame, text="Age:").grid(row=3, column=0, padx=5, pady=5)
             input_fields["Age"] = Entry(form_frame)
             input_fields["Age"].grid(row=3, column=1, padx=5, pady=5)
@@ -126,7 +134,7 @@ def create_data_gui(cursor, connection):
             input_fields["Team ID"] = Entry(form_frame)
             input_fields["Team ID"].grid(row=4, column=1, padx=5, pady=5)
 
-    def submit_data():
+    def submit_data(): #actual creation of the data and genreating the ID's randomly
         table_name = create_table_choice.get()
         if not table_name:
             messagebox.showerror("Error", "Please select a valid table!")
@@ -159,7 +167,7 @@ def create_data_gui(cursor, connection):
                     input_fields["Team ID"].get(),
                 )
             else:
-                messagebox.showerror("Error", "Unsupported table!")
+                messagebox.showerror("Error", "Unsupported table!") #error handling
                 return
 
             create_data(cursor, connection, table_name, data)
@@ -168,7 +176,7 @@ def create_data_gui(cursor, connection):
         except ValueError as ve:
             messagebox.showerror("Validation Error", f"Invalid input: {ve}")
 
-    # Create the create data window
+    # creates a new windown for the create operation
     create_window = Toplevel(root)
     create_window.title("Create Data")
     Label(create_window, text="Select Table:").pack(pady=5)
@@ -318,84 +326,92 @@ def delete_data_gui(cursor, connection):
     delete_id_input.grid(row=1, column=1, padx=5, pady=5)
     Button(delete_window, text="Delete", command=submit_delete).grid(row=2, column=0, columnspan=2, pady=10)
 
-
 def update_data_gui(cursor, connection):
     def setup_form():
-        
+        # Clear the form_frame
         for widget in form_frame.winfo_children():
             widget.destroy()
-        input_fields.clear()  
+        input_fields.clear()
 
-        table_name = table_mapping[update_table_choice.get()]
-        Label(form_frame, text="Record ID to Update:").grid(row=0, column=0, padx=5, pady=5)
-        record_id_input.grid(row=0, column=1, padx=5, pady=5)
+        table_name = update_table_choice.get()
 
+        # Add a field for the record ID
+        Label(form_frame, text="Record ID to Update:").pack(anchor="w", padx=5, pady=5)
+        input_fields["Record ID"] = Entry(form_frame)
+        input_fields["Record ID"].pack(fill="x", padx=5, pady=5)
+
+        # Add input fields based on the selected table
         if table_name == "Team":
-            Label(form_frame, text="Country:").grid(row=1, column=0, padx=5, pady=5)
-            Label(form_frame, text="Coach:").grid(row=2, column=0, padx=5, pady=5)
+            Label(form_frame, text="Country:").pack(anchor="w", padx=5, pady=5)
             input_fields["Country"] = Entry(form_frame)
-            input_fields["Country"].grid(row=1, column=1, padx=5, pady=5)
+            input_fields["Country"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="Coach:").pack(anchor="w", padx=5, pady=5)
             input_fields["Coach"] = Entry(form_frame)
-            input_fields["Coach"].grid(row=2, column=1, padx=5, pady=5)
+            input_fields["Coach"].pack(fill="x", padx=5, pady=5)
 
         elif table_name == "Stadium":
-            Label(form_frame, text="Stadium Name:").grid(row=1, column=0, padx=5, pady=5)
-            Label(form_frame, text="Capacity:").grid(row=2, column=0, padx=5, pady=5)
-            Label(form_frame, text="City:").grid(row=3, column=0, padx=5, pady=5)
+            Label(form_frame, text="Stadium Name:").pack(anchor="w", padx=5, pady=5)
             input_fields["Stadium Name"] = Entry(form_frame)
-            input_fields["Stadium Name"].grid(row=1, column=1, padx=5, pady=5)
+            input_fields["Stadium Name"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="Capacity:").pack(anchor="w", padx=5, pady=5)
             input_fields["Capacity"] = Entry(form_frame)
-            input_fields["Capacity"].grid(row=2, column=1, padx=5, pady=5)
+            input_fields["Capacity"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="City:").pack(anchor="w", padx=5, pady=5)
             input_fields["City"] = Entry(form_frame)
-            input_fields["City"].grid(row=3, column=1, padx=5, pady=5)
+            input_fields["City"].pack(fill="x", padx=5, pady=5)
 
         elif table_name == "Player":
-            Label(form_frame, text="Player Name:").grid(row=1, column=0, padx=5, pady=5)
-            Label(form_frame, text="Position:").grid(row=2, column=0, padx=5, pady=5)
-            Label(form_frame, text="DOB (YYYY-MM-DD):").grid(row=3, column=0, padx=5, pady=5)
-            Label(form_frame, text="Age:").grid(row=4, column=0, padx=5, pady=5)
+            Label(form_frame, text="Player Name:").pack(anchor="w", padx=5, pady=5)
             input_fields["Player Name"] = Entry(form_frame)
-            input_fields["Player Name"].grid(row=1, column=1, padx=5, pady=5)
+            input_fields["Player Name"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="Position:").pack(anchor="w", padx=5, pady=5)
             input_fields["Position"] = Entry(form_frame)
-            input_fields["Position"].grid(row=2, column=1, padx=5, pady=5)
+            input_fields["Position"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="DOB (YYYY-MM-DD):").pack(anchor="w", padx=5, pady=5)
             input_fields["DOB"] = Entry(form_frame)
-            input_fields["DOB"].grid(row=3, column=1, padx=5, pady=5)
+            input_fields["DOB"].pack(fill="x", padx=5, pady=5)
+
+            Label(form_frame, text="Age:").pack(anchor="w", padx=5, pady=5)
             input_fields["Age"] = Entry(form_frame)
-            input_fields["Age"].grid(row=4, column=1, padx=5, pady=5)
+            input_fields["Age"].pack(fill="x", padx=5, pady=5)
 
     def submit_update():
-        table_name = table_mapping[update_table_choice.get()]
+        table_name = update_table_choice.get()
         if not table_name:
             messagebox.showerror("Error", "Please select a valid table!")
             return
-        record_id = record_id_input.get()
+        record_id = input_fields["Record ID"].get()
         if not record_id:
             messagebox.showerror("Error", "Please enter the Record ID!")
             return
 
-        
-        if table_name == "Team":
-            data = (input_fields["Country"].get(), input_fields["Coach"].get())
-            update_query = "UPDATE Team SET Country = %s, Coach = %s WHERE TID = %s"
-        elif table_name == "Stadium":
-            data = (
-                input_fields["Stadium Name"].get(),
-                input_fields["Capacity"].get(),
-                input_fields["City"].get(),
-            )
-            update_query = "UPDATE Stadium SET Sname = %s, Capacity = %s, City = %s WHERE SID = %s"
-        elif table_name == "Player":
-            data = (
-                input_fields["Player Name"].get(),
-                input_fields["Position"].get(),
-                input_fields["DOB"].get(),
-                input_fields["Age"].get(),
-            )
-            update_query = "UPDATE Player SET Pname = %s, Position = %s, DOB = %s, Age = %s WHERE PID = %s"
-        else:
-            return
-
         try:
+            if table_name == "Team":
+                data = (input_fields["Country"].get(), input_fields["Coach"].get())
+                update_query = "UPDATE Team SET Country = %s, Coach = %s WHERE TID = %s"
+            elif table_name == "Stadium":
+                data = (
+                    input_fields["Stadium Name"].get(),
+                    input_fields["Capacity"].get(),
+                    input_fields["City"].get(),
+                )
+                update_query = "UPDATE Stadium SET Sname = %s, Capacity = %s, City = %s WHERE SID = %s"
+            elif table_name == "Player":
+                data = (
+                    input_fields["Player Name"].get(),
+                    input_fields["Position"].get(),
+                    input_fields["DOB"].get(),
+                    input_fields["Age"].get(),
+                )
+                update_query = "UPDATE Player SET Pname = %s, Position = %s, DOB = %s, Age = %s WHERE PID = %s"
+            else:
+                return
+
             cursor.execute(update_query, data + (record_id,))
             connection.commit()
             messagebox.showinfo("Success", f"Record in {table_name} updated successfully!")
@@ -403,19 +419,22 @@ def update_data_gui(cursor, connection):
         except mysql.connector.Error as e:
             messagebox.showerror("Update Error", f"Error updating data: {e}")
 
-    
+    # Create the update window
     update_window = Toplevel(root)
     update_window.title("Update Data")
+    update_window.geometry("400x400")
+
     Label(update_window, text="Select Table:").pack(pady=5)
     update_table_choice = ttk.Combobox(update_window, values=["Team", "Stadium", "Player"])
     update_table_choice.pack(pady=5)
     update_table_choice.bind("<<ComboboxSelected>>", lambda _: setup_form())
+
     form_frame = Frame(update_window)
-    form_frame.pack(pady=10)
+    form_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
     Button(update_window, text="Submit", command=submit_update).pack(pady=10)
 
     input_fields = {}  # Dictionary to hold input fields
-    record_id_input = Entry(update_window)
 
 
 # table mapping to be used in some of the operations
