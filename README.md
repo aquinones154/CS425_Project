@@ -21,16 +21,16 @@ The project is part of the CS425 course, database organization. The goal with co
 The database application supports CRUD(Create, Read, Update, Delete) opeartions
 
 Create
--When selecting to create data, the application will ask the user to input the data for the newly created data. To ensure no duplicate ID's are created for the data, there is a random generator to create the ID for the data minimizing errors with duplicate ID's
+- When selecting to create data, the application will ask the user to input the data for the newly created data. To ensure no duplicate ID's are created for the data, there is a random generator to create the ID for the data minimizing errors with duplicate ID's
 
 Read
 - When selecting to read data, the application will ask which table to read data from and opens up a new window and displays the user's selected table
 
 Update
--When selecting to update data, the application will ask the user for the table and the corresponding ID for the data to be updated. At each step there is validation to ensure there does exist an entry for that data, if not then and error will be printed to the user. Otherwise, the user can continue and update the data, at the end a message is printed to let the user know the data was updated successfully. 
+- When selecting to update data, the application will ask the user for the table and the corresponding ID for the data to be updated. At each step there is validation to ensure there does exist an entry for that data, if not then and error will be printed to the user. Otherwise, the user can continue and update the data, at the end a message is printed to let the user know the data was updated successfully. 
 
 Delete
--When selecting to delete data, similar to the update operation, the application will validate the table and ID to make sure an entry exist, if so then the data will be deleted along with a sucess message. If not, then an error will be printed to the user. 
+- When selecting to delete data, similar to the update operation, the application will validate the table and ID to make sure an entry exist, if so then the data will be deleted along with a sucess message. If not, then an error will be printed to the user. 
 
 
 
