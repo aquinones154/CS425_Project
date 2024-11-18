@@ -37,6 +37,19 @@ Advanced SQL Queries
 - Although having CRUD operations is useful, in the read world users want and will ask for more comlex queries. For this reason, the application also supports a number of more complex queries such as displaying teams who have scored more than 7 points in a home game, displaying players who have scored a number of goals in a home match etc.. 
 
 # How to use
+Follow these steps to get the database application running:
+
+### Make sure to have the following
+- Python 
+- MySQL server
+- Make sure mysql-connector is installed and running
+- Make sure tkinter is installed and working
+
+## Install commands for mysql-connector && tkinter
+
+````bash
+pip install mysql-connector
+
 
 
 
