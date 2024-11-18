@@ -11,7 +11,7 @@ def connect_to_database():
         connection = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="password",
+            password="Boba2021",
             database="womensWrlCUP"
         )
         if connection.is_connected():
@@ -337,6 +337,37 @@ def update_data_gui(cursor, connection):
     input_fields = {}
 
 
+# advanced queries option
+def advanced_queries(cursor, query):
+    try:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
+        return rows, columns
+    except mysql.connector.Error as e:
+        messagebox.showerror("Query Error", f"Error executing query: {e}") #error handling
+        return None, None
+
+
+# creates user interface for advance queries
+def show_query_results(rows, columns):
+    if not rows or not columns:
+        return
+    
+    result_window = Toplevel(root)
+    result_window.title("Query Results")
+
+    table = ttk.Treeview(result_window, columns=columns, show="headings")
+    for col in columns:
+        table.heading(col, text=col)
+        table.column(col, width=120, anchor=CENTER)
+
+    for row in rows:
+        table.insert("", "end", values=row)
+
+    table.pack(fill=BOTH, expand=True)
+
+
 # table mapping to be used in some of the operations
 table_mapping = {
     "Team": "Team",
@@ -361,6 +392,7 @@ if connection:
     Button(root, text="Create Data", command=lambda: create_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Delete Data", command=lambda: delete_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Update Data", command=lambda: update_data_gui(cursor, connection), width=20).pack(pady=10)
+    Button(root, text="Advanced Queries", command=lambda: advanced_queries(cursor), width=20).pack(pady=10)
     Button(root, text="Exit", command=root.destroy, width=20).pack(pady=10)
     
 root.mainloop()
