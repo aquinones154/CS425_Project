@@ -60,6 +60,20 @@ import tkinter
 tkinter._test()
 ```
 
+## Cloning the repository:
+
+- Open terminal
+- Go to directory or path you want to clone repository
+- Run the command:
+
+```bash
+git clone https://github.com/aquinones154/CS425_Project.git
+```
+
+```bash
+cd CS425_Project
+```
+
 
 
 
