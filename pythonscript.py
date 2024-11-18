@@ -11,7 +11,7 @@ def connect_to_database():
         connection = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Boba2021",
+            password="password",
             database="womensWrlCUP"
         )
         if connection.is_connected():
@@ -425,7 +425,22 @@ query_mapping = {
         SELECT t.Country, w.Year FROM team AS t, world_champions AS w
         WHERE t.TID = w.TID
         ORDER BY w.Year;
+    """,
+    "Find Average Player Age Per Team": """
+        WITH TeamPlayerAges AS (
+        SELECT 
+            T.Country AS Team,
+            P.Age AS PlayerAge
+        FROM Team T
+        JOIN Player P ON T.TID = P.TID
+    )
+    SELECT 
+        Team,
+        AVG(PlayerAge) AS AverageAge
+    FROM TeamPlayerAges
+    GROUP BY Team;
     """
+
 }
 # table mapping to be used in some of the operations
 table_mapping = {
