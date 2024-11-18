@@ -367,7 +367,66 @@ def show_query_results(rows, columns):
 
     table.pack(fill=BOTH, expand=True)
 
+# GUI for selecting and executing advanced queries
+def advanced_query_gui(cursor):
+    def execute_selected_query():
+        query = query_mapping[query_choice.get()]
+        rows, columns = advanced_queries(cursor, query)
+        show_query_results(rows, columns)
 
+    advanced_window = Toplevel(root)
+    advanced_window.title("Advanced Queries")
+
+    Label(advanced_window, text="Select Advanced Query:").pack(pady=5)
+    query_choice = ttk.Combobox(advanced_window, values=list(query_mapping.keys()))
+    query_choice.pack(pady=5)
+
+    Button(advanced_window, text="Execute Query", command=execute_selected_query).pack(pady=10)
+
+
+# Advanced SQL Queries
+query_mapping = {
+    "Teams with Oldest Players": """
+        SELECT T.Country
+        FROM Team T
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM Player P
+            WHERE P.TID != T.TID AND P.Age > (
+                SELECT MAX(Age) FROM Player WHERE TID = T.TID
+            )
+        );
+    """,
+    "Selects all the goals and shows player, country, time of goak, and ranks over fastest scored goals": """
+        SELECT p.pname, p.position, t.country, g.Time_of_Goal,
+        RANK() OVER (ORDER BY Time_of_Goal ASC) AS fastest_goal_rank
+        FROM Player AS p
+        LEFT JOIN goals AS g
+        ON p.pid = g.pid
+        LEFT JOIN team AS t
+        ON g.tid = t.tid;
+    """,
+    "Counts the total number of players per team": """
+        SELECT T.Country, COUNT(P.PID) AS Total_Players
+        FROM Player P
+        JOIN Team T ON P.TID = T.TID
+        GROUP BY T.Country;
+    """,
+    "Display the IDs of teams that have earned at least 7 points in a home game": """
+        SELECT DISTINCT t.TID FROM team_match AS t, gamematch AS g
+        WHERE t.MID = g.MID AND t.Home_match = "yes" AND Home_team_score > 7;
+    """,
+    "List all players above the average age, as well as how much older they are than the average sorted from youngest to oldest": """
+        SELECT Pname, (Age - (SELECT AVG(Age) FROM Player)) AS distance_from_avg_age FROM Player
+    WHERE Age > (SELECT AVG(Age) FROM Player)
+    ORDER BY Age ASC
+    """,
+    "List all past world champion team countries along with the year they won the championship, in chronological order": """
+        SELECT t.Country, w.Year FROM team AS t, world_champions AS w
+        WHERE t.TID = w.TID
+        ORDER BY w.Year;
+    """
+}
 # table mapping to be used in some of the operations
 table_mapping = {
     "Team": "Team",
@@ -392,7 +451,7 @@ if connection:
     Button(root, text="Create Data", command=lambda: create_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Delete Data", command=lambda: delete_data_gui(cursor, connection), width=20).pack(pady=10)
     Button(root, text="Update Data", command=lambda: update_data_gui(cursor, connection), width=20).pack(pady=10)
-    Button(root, text="Advanced Queries", command=lambda: advanced_queries(cursor), width=20).pack(pady=10)
+    Button(root, text="Advanced Queries", command=lambda: advanced_query_gui(cursor), width=20).pack(pady=10)
     Button(root, text="Exit", command=root.destroy, width=20).pack(pady=10)
     
 root.mainloop()
