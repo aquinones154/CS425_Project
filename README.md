@@ -32,6 +32,13 @@ Update
 Delete
 - When selecting to delete data, similar to the update operation, the application will validate the table and ID to make sure an entry exist, if so then the data will be deleted along with a sucess message. If not, then an error will be printed to the user. 
 
+Advanced SQL Queries
+
+- Although having CRUD operations is useful, in the read world users want and will ask for more comlex queries. For this reason, the application also supports a number of more complex queries such as displaying teams who have scored more than 7 points in a home game, displaying players who have scored a number of goals in a home match etc.. 
+
+# How to use
+
+
 
 
 
