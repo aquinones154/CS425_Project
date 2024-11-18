@@ -48,10 +48,11 @@ Follow these steps to get the database application running:
 ## Install commands for mysql-connector
 ```bash
 pip install mysql-connector
+``` 
 
 ```bash
 pip install tk
-
+```
 
 
 
