@@ -45,10 +45,11 @@ Follow these steps to get the database application running:
 - Make sure mysql-connector is installed and running
 - Make sure tkinter is installed and working
 
-## Install commands for mysql-connector && tkinter
-
+## Install commands for mysql-connector
 ````bash
-pip install mysql-connector
+pip install mysql-connector````
+
+## Install command for tkinker
 
 
 
